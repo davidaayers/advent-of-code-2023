@@ -1,7 +1,10 @@
-import part1
+import day1_funcs
 import utils.util as util
 
 input = util.read_file("input.txt")
-numbers = part1.transform_numbers(input)
-part_1_answer = part1.sum_numbers(numbers)
+
+# Part 1
+part_1_answer = sum([day1_funcs.part1_transform_number(n) for n in input])
 print(part_1_answer)
+
+# Part 2
