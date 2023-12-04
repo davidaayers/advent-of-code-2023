@@ -14,3 +14,11 @@ del test_input_lines[0]
 
 class TestDayFour(unittest.TestCase):
 
+    def test_score(self):
+        scratch_cards = [day4_funcs.parse_scratch_card(line) for line in test_input_lines]
+        self.assertEqual(scratch_cards[0].score(), 8)
+        self.assertEqual(scratch_cards[1].score(), 2)
+        self.assertEqual(scratch_cards[2].score(), 2)
+        self.assertEqual(scratch_cards[3].score(), 1)
+        self.assertEqual(scratch_cards[4].score(), 0)
+        self.assertEqual(scratch_cards[5].score(), 0)

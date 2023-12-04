@@ -3,7 +3,8 @@ import utils.util as util
 
 input = util.read_file("input.txt")
 
-part_1_answer = 0
+scratch_cards = [day4_funcs.parse_scratch_card(line) for line in input]
+part_1_answer = sum([card.score() for card in scratch_cards])
 print(f"Part 1: {part_1_answer}")
 
 # Part 2
