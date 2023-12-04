@@ -20,19 +20,19 @@ class ScratchCard:
         self.winning_numbers = winning_numbers
         self.present_numbers = present_numbers
 
-    def score(self):
-        winners = list(set(self.winning_numbers) & set(self.present_numbers))
 
-        if len(winners) == 0:
+    def num_winners(self):
+        return len(list(set(self.winning_numbers) & set(self.present_numbers)))
+
+    def score(self):
+        num_winners = self.num_winners()
+
+        if num_winners == 0:
             return 0
 
         score = 1
-        for i in range(len(winners)-1):
+        for i in range(num_winners-1):
             score *= 2
-
-        #print(f"Card {self.card_number} winners: {len(winners)} score: {score}")
-
-        # 1 2 4 8
 
         return score
 
