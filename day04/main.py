@@ -8,5 +8,5 @@ part_1_answer = sum([card.score() for card in scratch_cards])
 print(f"Part 1: {part_1_answer}")
 
 # Part 2
-part_2_answer = len(day4_funcs.process_cards(scratch_cards))
+part_2_answer = day4_funcs.process_cards(scratch_cards)
 print(f"Part 2: {part_2_answer}")

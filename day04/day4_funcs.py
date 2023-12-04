@@ -14,22 +14,23 @@ def parse_scratch_card(input_line):
 
 
 def process_cards(scratch_cards):
-    working_cards = scratch_cards.copy()
-    final_cards = list()
+    counts = dict()
+    # We have 1 of each card to start
+    for card in scratch_cards:
+        counts[card.card_number] = 1
 
-    while working_cards:
-        # grab the first one
-        card = working_cards.pop(0)
-        # print(f"Processing card: {card}")
-        final_cards.append(card)
-        # now, add cards for any winners on this card
-        if card.num_winners == 0:
-            continue
+    # Now, go through and figure out how many cards we have
+    for card in scratch_cards:
+        # How many of this card do we have?
+        how_many = counts[card.card_number]
+        win_start = card.card_number + 1
+        win_end = card.card_number + card.num_winners()
+        # Add extra cards for each card we have
+        for c in range(how_many):
+            for i in range(win_start, win_end+1):
+                counts[i] += 1
 
-        for i in range(card.card_number, card.card_number + card.num_winners()):
-            working_cards.append(scratch_cards[i])
-
-    return final_cards
+    return sum(counts.values())
 
 
 class ScratchCard:

@@ -12,6 +12,7 @@ Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11"""
 test_input_lines = test_input.split("\n")
 del test_input_lines[0]
 
+
 class TestDayFour(unittest.TestCase):
 
     def test_score(self):
@@ -25,5 +26,4 @@ class TestDayFour(unittest.TestCase):
 
     def test_process_cards(self):
         scratch_cards = [day4_funcs.parse_scratch_card(line) for line in test_input_lines]
-        final_cards = day4_funcs.process_cards(scratch_cards)
-        self.assertEqual(len(final_cards), 30)
+        self.assertEqual(day4_funcs.process_cards(scratch_cards), 30)
