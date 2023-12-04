@@ -22,3 +22,8 @@ class TestDayFour(unittest.TestCase):
         self.assertEqual(scratch_cards[3].score(), 1)
         self.assertEqual(scratch_cards[4].score(), 0)
         self.assertEqual(scratch_cards[5].score(), 0)
+
+    def test_process_cards(self):
+        scratch_cards = [day4_funcs.parse_scratch_card(line) for line in test_input_lines]
+        final_cards = day4_funcs.process_cards(scratch_cards)
+        self.assertEqual(len(final_cards), 30)
