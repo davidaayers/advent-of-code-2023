@@ -1,11 +1,16 @@
+import sys
+
 import day5_funcs
 import utils.util as util
 
 input = util.read_file("input.txt")
 
-part_1_answer = 0
-print(f"Part 1: {part_1_answer}")
+almanac = day5_funcs.parse_input(input)
+seed_locations = []
+for seed in almanac.seeds:
+    location = day5_funcs.find_location_for_seed(almanac, seed)
+    seed_locations.append(location)
 
-# Part 2
-part_2_answer = 0
-print(f"Part 2: {part_2_answer}")
+seed_locations.sort()
+part_1_answer = seed_locations[0]
+print(f"Part 1: {part_1_answer}")
