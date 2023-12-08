@@ -1,3 +1,4 @@
+from math import gcd
 import re
 
 
@@ -37,6 +38,33 @@ def walk_map(desert_map):
             current_node = current_node.adjacent[d]
 
     return steps
+
+
+def walk_map_as_ghost(desert_map):
+    directions = desert_map[0]
+    nodes = desert_map[1]
+    # [symbol for symbol in symbols if symbol.is_gear()]
+    current_nodes = [node for node in nodes.values() if node.name.endswith("A")]
+
+    ghost_steps = []
+    for ghost_node in current_nodes:
+        current_ghost_node = ghost_node
+        steps = 0
+        while not current_ghost_node.name.endswith("Z"):
+            for d in directions:
+                steps += 1
+                current_ghost_node = current_ghost_node.adjacent[d]
+
+        ghost_steps.append(steps)
+
+    # calc lcm - I arrived at LCM based on hints from Reddit
+    # https://www.reddit.com/r/adventofcode/comments/18dh4p8/2023_day_8_part_2_im_a_bit_frustrated/
+    # LCM code
+    # from https://stackoverflow.com/questions/37237954/calculate-the-lcm-of-a-list-of-given-numbers-in-python
+    lcm = 1
+    for i in ghost_steps:
+        lcm = lcm * i // gcd(lcm, i)
+    return lcm
 
 
 class Node:

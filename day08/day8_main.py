@@ -9,5 +9,5 @@ part_1_answer = day8_funcs.walk_map(desert_map)
 print(f"Part 1: {part_1_answer}")
 
 # Part 2
-part_2_answer = 0
+part_2_answer = day8_funcs.walk_map_as_ghost(desert_map)
 print(f"Part 2: {part_2_answer}")
