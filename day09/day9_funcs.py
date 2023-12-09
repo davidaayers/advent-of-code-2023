@@ -7,6 +7,34 @@ def parse_input(input_lines):
 
 
 def predict_next_reading(reading_history):
+    all_diffs = calc_diffs(reading_history)
+    all_diffs.reverse()
+    next_reading = 0
+
+    for idx, diff in enumerate(all_diffs):
+        if idx == 0:
+            continue
+
+        next_reading = next_reading + diff[-1]
+
+    return reading_history[-1] + next_reading
+
+
+def predict_previous_reading(reading_history):
+    all_diffs = calc_diffs(reading_history)
+    all_diffs.reverse()
+    next_reading = 0
+
+    for idx, diff in enumerate(all_diffs):
+        if idx == 0:
+            continue
+
+        next_reading = diff[0] - next_reading
+
+    return reading_history[0] - next_reading
+
+
+def calc_diffs(reading_history):
     next_diffs = reading_history
     all_diffs = []
 
@@ -20,16 +48,7 @@ def predict_next_reading(reading_history):
 
         next_diffs = diffs
 
-    all_diffs.reverse()
-    next_reading = 0
-
-    for idx, diff in enumerate(all_diffs):
-        if idx == 0:
-            continue
-
-        next_reading = next_reading + diff[-1]
-
-    return reading_history[-1] + next_reading
+    return all_diffs
 
 
 def calc_diffs_between_readings(reading_history):

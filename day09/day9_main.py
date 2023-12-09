@@ -10,5 +10,6 @@ part_1_answer = sum(next_readings)
 print(f"Part 1: {part_1_answer}")
 
 # Part 2
-part_2_answer = 0
+prev_readings = [day9_funcs.predict_previous_reading(reading) for reading in readings]
+part_2_answer = sum(prev_readings)
 print(f"Part 2: {part_2_answer}")

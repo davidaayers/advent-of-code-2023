@@ -42,3 +42,14 @@ class TestDayNine(unittest.TestCase):
 
         next_reading = day9_funcs.predict_next_reading(reading_histories[2])
         self.assertEqual(next_reading, 68)
+
+    def test_predict_previous_reading(self):
+        previous_reading = day9_funcs.predict_previous_reading(reading_histories[0])
+        self.assertEqual(previous_reading, -3)
+
+        previous_reading = day9_funcs.predict_previous_reading(reading_histories[1])
+        self.assertEqual(previous_reading, 0)
+
+        previous_reading = day9_funcs.predict_previous_reading(reading_histories[2])
+        self.assertEqual(previous_reading, 5)
+
