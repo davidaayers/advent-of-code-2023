@@ -18,9 +18,17 @@ SJLL7
 |F--J
 LJ.LJ"""
 
-reading_histories = day9_funcs.parse_input(test_input_lines)
+test_input_lines2 = test_input2.split("\n")
+del test_input_lines2[0]
+
+pipe_map = day10_funcs.parse_input(test_input_lines)
+pipe_map2 = day10_funcs.parse_input(test_input_lines2)
 
 
 class TestDayTen(unittest.TestCase):
 
     def test_parsing(self):
+        print(pipe_map)
+        self.assertEqual(len(pipe_map.loop_nodes), 8)
+        self.assertEqual(len(pipe_map2.loop_nodes), 16)
+
