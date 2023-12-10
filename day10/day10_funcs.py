@@ -110,6 +110,34 @@ def map_array_to_str(map_array):
     return ascii_map
 
 
+def count_inside(pipe_map):
+    num_inside = 0
+    inside = False
+    last_corner = None
+    for y in range(pipe_map.height):
+        for x in range(pipe_map.width):
+            check_char = pipe_map.pipe_map[y][x]
+            if check_char == "." and inside:
+                num_inside += 1
+
+            if check_char == "|":
+                inside = not inside
+
+            if check_char == "L" or check_char == "F":
+                last_corner = check_char
+
+            if check_char == "J":
+                if last_corner == "F":
+                    inside = not inside
+                last_corner = check_char
+
+            if check_char == "7":
+                if last_corner == "L":
+                    inside = not inside
+                last_corner = check_char
+
+    return num_inside
+
 class PipeMap:
 
     def __init__(self, width, height):
