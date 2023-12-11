@@ -1,3 +1,5 @@
+from utils.util import map_array_to_str
+
 NORTH = 0
 SOUTH = 1
 EAST = 2
@@ -90,24 +92,6 @@ def find_farthest_num_steps(pipe_map):
             break
 
     return steps
-
-
-def map_array_to_str(map_array):
-    box_chars = {
-        "|": "\u2502",
-        "-": "\u2500",
-        "L": "\u2514",
-        "J": "\u2518",
-        "7": "\u2510",
-        "F": "\u250C"
-    }
-    ascii_map = ""
-    for map_line in map_array:
-        ascii_map += ("".join(map_line))
-        for char in box_chars:
-            ascii_map = ascii_map.replace(char, box_chars[char])
-        ascii_map += "\n"
-    return ascii_map
 
 
 def count_inside(pipe_map):
