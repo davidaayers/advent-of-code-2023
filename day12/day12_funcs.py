@@ -1,4 +1,5 @@
 import re
+import functools
 
 
 def parse_input(input_lines):
@@ -15,15 +16,15 @@ def parse_input(input_lines):
     return rows
 
 
-def find_num_permutations(spring_row, how_many, count, recursion_count):
-    indent = "  " * recursion_count
+@functools.cache
+def find_num_permutations(spring_row, how_many, count):
     # print(f"{indent}row: '{spring_row}' how_many={how_many} count={count}")
 
     if len(how_many) == 0 and len(spring_row) > 0:
         # we don't have any more matching groups, but we have text left
-        # that's ok if they are all ?
+        # that's ok if they are all ? or .
         for i in spring_row:
-            if i != "?":
+            if i != "?" and i != '.':
                 return count
 
         # it was only ?, it's a match!
@@ -38,11 +39,11 @@ def find_num_permutations(spring_row, how_many, count, recursion_count):
         return count
 
     if spring_row[0] == ".":
-        count = find_num_permutations(spring_row[1:], how_many.copy(), count, recursion_count+1)
+        count = find_num_permutations(spring_row[1:], how_many, count)
 
     if spring_row[0] == "?":
-        count = find_num_permutations("." + spring_row[1:], how_many.copy(), count, recursion_count+1)
-        count = find_num_permutations("#" + spring_row[1:], how_many.copy(), count, recursion_count+1)
+        count = find_num_permutations("." + spring_row[1:], how_many, count)
+        count = find_num_permutations("#" + spring_row[1:], how_many, count)
 
     if spring_row[0] == "#":
         length = how_many[0]
@@ -66,9 +67,8 @@ def find_num_permutations(spring_row, how_many, count, recursion_count):
                 length += 1
 
         if found_match:
-            del how_many[0]
             new_string = spring_row[length:]
-            count = find_num_permutations(new_string, how_many.copy(), count, recursion_count+1)
+            count = find_num_permutations(new_string, how_many[1:], count)
 
     return count
 
