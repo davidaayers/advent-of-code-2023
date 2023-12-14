@@ -10,74 +10,59 @@ def parse_input(input_lines):
         # remove repeating ".", they aren't necessary
         spring = re.sub(r"\.+", ".", parts[0])
         spring_row.springs = spring
-        spring_row.how_many = [int(part) for part in parts[1].split(",")]
+        spring_row.group_counts = [int(part) for part in parts[1].split(",")]
         rows.append(spring_row)
 
     return rows
 
 
 @functools.cache
-def find_num_permutations(spring_row, how_many, count):
-    # print(f"{indent}row: '{spring_row}' how_many={how_many} count={count}")
+def find_num_permutations(spring_row, group_counts):
+    # print(f"row: '{spring_row}' how_many={how_many} count={count}")
 
-    if len(how_many) == 0 and len(spring_row) > 0:
+    if len(group_counts) == 0 and len(spring_row) > 0:
         # we don't have any more matching groups, but we have text left
         # that's ok if they are all ? or .
-        for i in spring_row:
-            if i != "?" and i != '.':
-                return count
-
-        # it was only ?, it's a match!
-        # print(f"{indent}----> Found a match!")
-        count += 1
-        return count
+        if "#" in spring_row:
+            return 0
+        else:
+            return 1
 
     if len(spring_row) == 0:
-        if len(how_many) == 0:
-            # print(f"{indent}----> Found a match!")
-            count += 1
-        return count
+        if len(group_counts) == 0:
+            return 1
+        else:
+            return 0
 
     if spring_row[0] == ".":
-        count = find_num_permutations(spring_row[1:], how_many, count)
+        return find_num_permutations(spring_row[1:], group_counts)
 
     if spring_row[0] == "?":
-        count = find_num_permutations("." + spring_row[1:], how_many, count)
-        count = find_num_permutations("#" + spring_row[1:], how_many, count)
+        return (find_num_permutations("." + spring_row[1:], group_counts) +
+                find_num_permutations("#" + spring_row[1:], group_counts))
 
     if spring_row[0] == "#":
-        length = how_many[0]
+        length = group_counts[0]
         found_match = True
         if len(spring_row) < length:
-            found_match = False
+            return 0
         else:
-            for i in range(length):
-                c1 = spring_row[i]
-                if c1 == ".":
-                    found_match = False
-                    break
+            if "." in spring_row[0:length]:
+                return 0
 
         # make sure there isn't another # after this match, it must be a ? or a . or the end of line
         if len(spring_row) > length:
-            next_char_after_match = spring_row[length]
-            if next_char_after_match == "#":
-                found_match = False
-            else:
-                # expand length to chop the next character too
-                length += 1
+            if spring_row[length] == "#":
+                return 0
 
-        if found_match:
-            new_string = spring_row[length:]
-            count = find_num_permutations(new_string, how_many[1:], count)
-
-    return count
+        return find_num_permutations(spring_row[length + 1:], group_counts[1:])
 
 
 class SpringRow:
 
     def __init__(self):
         self.springs = None
-        self.how_many = None
+        self.group_counts = None
 
     def __str__(self):
-        return f"{self.springs}: {self.how_many}"
+        return f"{self.springs}: {self.group_counts}"

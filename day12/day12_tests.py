@@ -1,8 +1,5 @@
 import day12_funcs
 import unittest
-# import sys
-# print(sys.getrecursionlimit())
-# sys.setrecursionlimit(1500)
 
 test_input = """
 ???.### 1,1,3
@@ -28,7 +25,7 @@ class TestDayTwelve(unittest.TestCase):
 
         for idx, spring_row in enumerate(springs):
             # print(f"Checking: {spring_row} with expected answer of {answers[idx]}")
-            answer = day12_funcs.find_num_permutations(spring_row.springs, tuple(spring_row.how_many), 0)
+            answer = day12_funcs.find_num_permutations(spring_row.springs, tuple(spring_row.group_counts))
             # print(f"{spring_row} -> {answer}")
             self.assertEqual(answers[idx], answer)
 
