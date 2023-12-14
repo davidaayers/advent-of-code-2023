@@ -16,14 +16,9 @@ print(f"Part 1: {part_1_answer}")
 
 part_2_answer = 0
 for spring_row in springs:
-    expanded_how_many = []
-    expanded_springs = ""
-    for i in range(5):
-        expanded_springs += spring_row.springs
-        expanded_springs += "?"
-        expanded_how_many.extend(spring_row.group_counts)
+    unfolded_spring_row = day12_funcs.unfold(spring_row)
 
-    answer = day12_funcs.find_num_permutations(expanded_springs, tuple(expanded_how_many))
+    answer = day12_funcs.find_num_permutations(unfolded_spring_row.springs, tuple(unfolded_spring_row.group_counts))
     part_2_answer += answer
 
 # Part 2

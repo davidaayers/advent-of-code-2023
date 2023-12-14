@@ -1,4 +1,4 @@
-import day12_funcs
+from day12_funcs import *
 import unittest
 
 test_input = """
@@ -17,15 +17,21 @@ del test_input_lines[0]
 class TestDayTwelve(unittest.TestCase):
 
     def test_parsing(self):
-        springs = day12_funcs.parse_input(test_input_lines)
+        springs = parse_input(test_input_lines)
 
     def test_find_num_permutations(self):
-        springs = day12_funcs.parse_input(test_input_lines)
+        springs = parse_input(test_input_lines)
         answers = [1, 4, 1, 1, 4, 10, 1]
 
         for idx, spring_row in enumerate(springs):
             # print(f"Checking: {spring_row} with expected answer of {answers[idx]}")
-            answer = day12_funcs.find_num_permutations(spring_row.springs, tuple(spring_row.group_counts))
+            answer = find_num_permutations(spring_row.springs, tuple(spring_row.group_counts))
             # print(f"{spring_row} -> {answer}")
             self.assertEqual(answers[idx], answer)
 
+    def test_unfold(self):
+        spring_row = SpringRow(".#",[1])
+        unfolded_spring_row = unfold(spring_row)
+        self.assertEqual(".#?.#?.#?.#?.#", unfolded_spring_row.springs)
+        self.assertEqual([1, 1, 1, 1, 1], unfolded_spring_row.group_counts)
+        print(unfolded_spring_row)

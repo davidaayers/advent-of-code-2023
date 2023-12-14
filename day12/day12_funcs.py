@@ -58,11 +58,15 @@ def find_num_permutations(spring_row, group_counts):
         return find_num_permutations(spring_row[length + 1:], group_counts[1:])
 
 
+def unfold(spring_row):
+    return SpringRow("?".join([spring_row.springs] * 5), spring_row.group_counts * 5)
+
+
 class SpringRow:
 
-    def __init__(self):
-        self.springs = None
-        self.group_counts = None
+    def __init__(self, springs=None, group_counts=None):
+        self.springs = springs
+        self.group_counts = group_counts
 
     def __str__(self):
         return f"{self.springs}: {self.group_counts}"
