@@ -45,7 +45,7 @@ reflections = parse_input(test_input_lines)
 reflections2 = parse_input(test_input_lines2)
 
 
-class TestDayThirteen(unittest.TestCase):
+class TestDayTwelve(unittest.TestCase):
 
     def test_find_horizontal_reflection(self):
         num_above = find_horizontal_reflection(reflections[1])
