@@ -1,152 +1,68 @@
-HORIZONTAL = 0
-VERTICAL = 1
+from utils.util import *
 
 
 def parse_input(input_lines):
-    reflections = []
-    this_reflection = []
-    for line in input_lines:
-        if line == "":
-            reflections.append(this_reflection.copy())
-            this_reflection = []
-        else:
-            this_reflection.append(line)
+    width = len(input_lines[0])
+    height = len(input_lines)
+    platform = Platform(width, height)
 
-    # the last one
-    reflections.append(this_reflection.copy())
-    return reflections
+    for y, line in enumerate(input_lines):
+        for x, symbol in enumerate(line):
+            if symbol == "O" or symbol == "#":
+                platform.add_symbol(x, y, symbol)
 
+    print(map_array_to_str(platform.platform_map))
 
-def find_reflection(reflection):
-    h_answers = find_horizontal_reflection(reflection)
-    v_answers = find_vertical_reflection(reflection)
-    if h_answers:
-        return HORIZONTAL, h_answers
-    else:
-        return VERTICAL, v_answers
+    return platform
 
 
-def find_all_reflections(reflection):
-    h_answers = find_horizontal_reflection(reflection)
-    v_answers = find_vertical_reflection(reflection)
-    return h_answers, v_answers
+def calc_load_in_dir(platform, direction):
+    total_load = 0
+    if direction == NORTH:
+        row_load = platform.height
+        for line in platform.platform_map:
+            num_rocks = [rock for rock in line if rock == "O"]
+            total_load += len(num_rocks) * row_load
+            row_load -= 1
+
+    return total_load
 
 
-def find_vertical_reflection(reflection):
-    # rotate 90 degrees, then use find_horizontal_reflection
-    rotated_reflection = rotate_reflection(reflection)
+class Platform:
 
-    return find_horizontal_reflection(rotated_reflection)
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+        self.platform_map = [["." for x in range(width)] for y in range(height)]
+        self.rocks = []
 
+    def add_symbol(self, x, y, symbol):
+        self.platform_map[y][x] = symbol
+        if symbol == "O":
+            self.rocks.append(Rock(x,y))
 
-def rotate_reflection(reflection):
-    # rotate 90 degrees, then use find_horizontal_reflection
-    rotated_reflection = []
+    def tilt(self, direction):
+        dx = CARDINAL_DIRECTIONS[direction][1]
+        dy = CARDINAL_DIRECTIONS[direction][0]
 
-    for x in range(len(reflection[0])):
-        line = ""
-        for y in range(len(reflection) - 1, -1, -1):
-            line += reflection[y][x]
-        rotated_reflection.append(line)
-
-    return rotated_reflection
-
-
-def find_horizontal_reflection(reflection):
-    # find two rows in a row that are the same
-    answers = []
-    for idx, line in enumerate(reflection):
-        if idx < len(reflection) - 1:
-            next_line = reflection[idx + 1]
-            # Did we find a possible reflection?
-            if line == next_line:
-                # This assumes there is only *one* actual reflection, so if
-                # we've found it, we can bail out
-                if is_actual_reflection(reflection, idx, idx + 1):
-                    answers.append(idx + 1)
-
-    return answers
+        for rock in self.rocks:
+            can_move = True
+            while can_move:
+                new_x = rock.x + dx
+                new_y = rock.y + dy
+                test_symbol = self.platform_map[new_y][new_x]
+                if (new_y > self.height or new_y < 0 or new_x > self.width or new_x < 0 or
+                        test_symbol == "#" or test_symbol == "O"):
+                    can_move = False
+                else:
+                    self.platform_map[new_y][new_x] = "O"
+                    self.platform_map[rock.y][rock.x] = "."
+                    rock.x = new_x
+                    rock.y = new_y
 
 
-def is_actual_reflection(reflection, l1, l2):
-    check = 1
-    reflection_reaches_edge = True
-    while True:
-        c1 = l1 - check
-        c2 = l2 + check
+class Rock:
 
-        # Did we reach the edge?
-        if c1 < 0 or c2 == len(reflection):
-            break
-
-        # Do the reflected lines match?
-        if reflection[c1] != reflection[c2]:
-            reflection_reaches_edge = False
-            break
-
-        check += 1
-
-    if reflection_reaches_edge:
-        return True
-    else:
-        return False
-
-
-def find_reflection_with_smudge(reflection):
-    # First, we need to find the original reflection, because the new one (once we fix
-    # the smudge) *has* to be at a different location
-    orig_dir, answers = find_reflection(reflection)
-    orig_answer = answers[0]
-
-    for y in range(len(reflection)):
-        for x in range(len(reflection[0])):
-            reflection_copy = reflection.copy()
-            line = reflection_copy[y]
-            c = line[x]
-            if c == ".":
-                line = line[:x] + "#" + line[x + 1:]
-            else:
-                line = line[:x] + "." + line[x + 1:]
-
-            reflection_copy[y] = line
-
-            h_answers, v_answers = find_all_reflections(reflection_copy)
-
-            if orig_dir == HORIZONTAL:
-                h_answers = [answer for answer in h_answers if answer != orig_answer]
-            else:
-                v_answers = [answer for answer in v_answers if answer != orig_answer]
-
-            if not h_answers and not v_answers:
-                continue
-
-            if h_answers:
-                return HORIZONTAL, h_answers[0]
-            else:
-                return VERTICAL, v_answers[0]
-
-
-def calc_answer_for_part_one(reflections):
-    answer = 0
-    for idx, reflection in enumerate(reflections):
-        direction, answers = find_reflection(reflection)
-
-        if direction == HORIZONTAL:
-            answer = answer + answers[0] * 100
-        else:
-            answer = answer + answers[0]
-
-    return answer
-
-
-def calc_answer_for_part_two(reflections):
-    answer = 0
-    for idx, reflection in enumerate(reflections):
-        direction, num = find_reflection_with_smudge(reflection)
-
-        if direction == HORIZONTAL:
-            answer = answer + num * 100
-        else:
-            answer = answer + num
-
-    return answer
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
