@@ -3,13 +3,20 @@ SOUTH = 1
 EAST = 2
 WEST = 3
 
-DIRS = [NORTH, EAST, SOUTH, WEST]
+DIRS = [NORTH, WEST, SOUTH, EAST]
 
 CARDINAL_DIRECTIONS = {
     NORTH: [-1, 0],
     SOUTH: [1, 0],
     EAST: [0, 1],
     WEST: [0, -1]
+}
+
+DIRECTION_NAMES = {
+    NORTH: "North",
+    SOUTH: "South",
+    EAST: "East",
+    WEST: "West"
 }
 
 
