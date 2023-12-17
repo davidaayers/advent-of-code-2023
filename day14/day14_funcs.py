@@ -11,7 +11,7 @@ def parse_input(input_lines):
             if symbol == "O" or symbol == "#":
                 platform.add_symbol(x, y, symbol)
 
-    print(map_array_to_str(platform.platform_map))
+    # print(map_array_to_str(platform.platform_map))
 
     return platform
 
@@ -29,9 +29,21 @@ def calc_load_on_north_pillar(platform):
 
 def calc_load_after_cycles(platform, cycles):
     load_after_cycle = 0
+    seen_before = dict()
+    loads = []
     for c in range(cycles):
         for direction in DIRS:
             platform.tilt(direction)
+
+        load = calc_load_on_north_pillar(platform)
+        platform_str = map_array_to_str(platform.platform_map)
+        if platform_str in seen_before:
+            print(f"saw this before at cycle {c}")
+            print(loads)
+            return load
+
+        seen_before[platform_str] = load
+        loads.append(load)
 
     return load_after_cycle
 
@@ -51,7 +63,7 @@ class Platform:
 
     def tilt(self, direction):
 
-        print(f"Tilting {DIRECTION_NAMES[direction]}")
+        # print(f"Tilting {DIRECTION_NAMES[direction]}")
 
         dx = CARDINAL_DIRECTIONS[direction][1]
         dy = CARDINAL_DIRECTIONS[direction][0]
@@ -80,10 +92,10 @@ class Platform:
             rocks.sort(key=s_sort)
 
         if direction == NORTH:
-            def s_sort(sr):
+            def n_sort(sr):
                 return sr.y, sr.x
 
-            rocks.sort(key=s_sort)
+            rocks.sort(key=n_sort)
 
         for rock in rocks:
             can_move = True
@@ -102,7 +114,7 @@ class Platform:
                     rock.x = new_x
                     rock.y = new_y
 
-        print(map_array_to_str(self.platform_map))
+        # print(map_array_to_str(self.platform_map))
 
 
 class Rock:

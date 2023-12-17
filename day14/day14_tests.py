@@ -57,4 +57,7 @@ class TestDayFourteen(unittest.TestCase):
         platform_actual = map_array_to_str(platform.platform_map)
         self.assertEqual(after, platform_actual)
 
-
+    def test_find_repeating_pattern(self):
+        platform = parse_input(test_input_lines)
+        load = calc_load_after_cycles(platform, 1_000_000_000)
+        self.assertEqual(64, load)
