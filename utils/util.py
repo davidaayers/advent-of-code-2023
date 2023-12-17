@@ -1,3 +1,18 @@
+NORTH = 0
+SOUTH = 1
+EAST = 2
+WEST = 3
+
+DIRS = [NORTH, EAST, SOUTH, WEST]
+
+CARDINAL_DIRECTIONS = {
+    NORTH: [-1, 0],
+    SOUTH: [1, 0],
+    EAST: [0, 1],
+    WEST: [0, -1]
+}
+
+
 def read_file(file_name):
     with open(file_name) as f:
         content = f.read().splitlines()

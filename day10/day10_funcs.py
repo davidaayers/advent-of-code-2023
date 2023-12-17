@@ -1,18 +1,4 @@
-from utils.util import map_array_to_str
-
-NORTH = 0
-SOUTH = 1
-EAST = 2
-WEST = 3
-
-ALL_DIRS = [NORTH, SOUTH, EAST, WEST]
-
-CARDINAL_DIRECTIONS = {
-    NORTH: [-1, 0],
-    SOUTH: [1, 0],
-    EAST: [0, 1],
-    WEST: [0, -1]
-}
+from utils.util import *
 
 
 def parse_input(input_lines):
@@ -39,7 +25,7 @@ def parse_input(input_lines):
         next_node = nodes.pop(0)
         visited_nodes.append(next_node)
         adjacent_nodes = []
-        for direction in ALL_DIRS:
+        for direction in DIRS:
             if next_node.can_connect_in_direction(direction, full_map):
                 # found a valid node
                 test_x = next_node.x + CARDINAL_DIRECTIONS[direction][1]
