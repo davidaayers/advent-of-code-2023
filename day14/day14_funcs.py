@@ -28,24 +28,33 @@ def calc_load_on_north_pillar(platform):
 
 
 def calc_load_after_cycles(platform, cycles):
-    load_after_cycle = 0
     seen_before = dict()
     loads = []
-    for c in range(cycles):
-        for direction in DIRS:
-            platform.tilt(direction)
+    end_of_cycle_str = None
 
+    for c in range(cycles):
+        run_tilt_cycle(platform)
         load = calc_load_on_north_pillar(platform)
         platform_str = map_array_to_str(platform.platform_map)
         if platform_str in seen_before:
-            print(f"saw this before at cycle {c}")
-            print(loads)
-            return load
+            end_of_cycle_str = platform_str
+            break
 
-        seen_before[platform_str] = load
+        seen_before[platform_str] = c
         loads.append(load)
 
-    return load_after_cycle
+    num_cycles = len(loads)
+    first_cycle = seen_before[end_of_cycle_str]
+
+    # TBH, I cheated a bit on this part, I looked at
+    # https://github.com/xHyroM/aoc/blob/main/2023/14/second.py for help on how to
+    # figure this formula out
+    return loads[(cycles - first_cycle) % (num_cycles - first_cycle) + first_cycle - 1]
+
+
+def run_tilt_cycle(platform):
+    for direction in DIRS:
+        platform.tilt(direction)
 
 
 class Platform:
