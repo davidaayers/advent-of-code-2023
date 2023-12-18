@@ -43,18 +43,18 @@ class TestDaySixteen(unittest.TestCase):
     def test_parsing(self):
         contraption_map = parse_input(test_input_lines)
         self.assertEqual(".", contraption_map.puzzle_map.map_squares[0][0])
-        print(contraption_map.puzzle_map)
 
     def test_project_beam(self):
         contraption_map = parse_input(test_input_lines)
-        print(contraption_map.puzzle_map)
-        project_beam(contraption_map)
-        print(contraption_map.light_map)
+        project_beam(contraption_map, Beam(EAST, -1, 0))
         self.assertEqual(46, count_illuminated_squares(contraption_map))
 
     def test_project_beam2(self):
         contraption_map = parse_input(test_input_lines2)
-        print(contraption_map.puzzle_map)
-        project_beam(contraption_map)
-        print(contraption_map.light_map)
-        self.assertEqual(46, count_illuminated_squares(contraption_map))
+        project_beam(contraption_map, Beam(EAST, -1, 0))
+        self.assertEqual(16, count_illuminated_squares(contraption_map))
+
+    def test_find_best_beam(self):
+        contraption_map = parse_input(test_input_lines)
+        tiles_energized = find_best_beam(contraption_map)
+        self.assertEqual(51, tiles_energized)

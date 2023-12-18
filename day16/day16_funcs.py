@@ -6,17 +6,10 @@ def parse_input(input_lines):
     return ContraptionMap(puzzle_map)
 
 
-def project_beam(contraption_map):
-    initial_beam = Beam(EAST, -1, 0)
+def project_beam(contraption_map, initial_beam):
     beams = [initial_beam]
     splitters = []
-    cnt = 0
     while beams:
-        cnt += 1
-        # advance each beam
-        #ascii_map = contraption_map.light_map
-        #print(ascii_map)
-        #print(f"Light map:\n{ascii_map}")
         for beam in beams.copy():
             contraption_map.illuminate(beam.x, beam.y)
             next_x = beam.x + CARDINAL_DIRECTIONS[beam.direction][1]
@@ -74,13 +67,42 @@ def project_beam(contraption_map):
                 elif check_symbol == "/":
                     beam.direction = WEST
                 elif check_symbol == "-" and not [next_x, next_y] in splitters:
-                    # split the beams, one going NORTH, the other going SOUTH
                     beam.direction = EAST
                     new_beam = Beam(WEST, next_x, next_y)
                     beams.append(new_beam)
                     splitters.append([next_x, next_y])
                 elif [next_x, next_y] in splitters:
                     beams.remove(beam)
+
+
+def find_best_beam(contraption_map):
+    all_beams = []
+    width = contraption_map.puzzle_map.width
+    height = contraption_map.puzzle_map.height
+    for x in range(width):
+        beam_top = Beam(SOUTH, x, -1)
+        contraption_map.light_map = PuzzleMap(width, height)
+        project_beam(contraption_map, beam_top)
+        all_beams.append(count_illuminated_squares(contraption_map))
+
+        beam_bottom = Beam(NORTH, x, height)
+        contraption_map.light_map = PuzzleMap(width, height)
+        project_beam(contraption_map, beam_bottom)
+        all_beams.append(count_illuminated_squares(contraption_map))
+
+    for y in range(height):
+        beam_left = Beam(EAST, -1, y)
+        contraption_map.light_map = PuzzleMap(width, height)
+        project_beam(contraption_map, beam_left)
+        all_beams.append(count_illuminated_squares(contraption_map))
+
+        beam_right = Beam(WEST, width, y)
+        contraption_map.light_map = PuzzleMap(width, height)
+        project_beam(contraption_map, beam_right)
+        all_beams.append(count_illuminated_squares(contraption_map))
+
+    all_beams.sort(reverse=True)
+    return all_beams[0]
 
 
 def count_illuminated_squares(contraption_map):
@@ -109,3 +131,6 @@ class Beam:
         self.direction = initial_direction
         self.x = x
         self.y = y
+
+    def __str__(self):
+        return f"{DIRECTION_NAMES[self.direction]}: {self.x}, {self.y}"
