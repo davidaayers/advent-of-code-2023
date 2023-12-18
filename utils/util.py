@@ -43,3 +43,39 @@ def map_array_to_str(map_array, use_box_chars=False):
                 ascii_map = ascii_map.replace(char, box_chars[char])
         ascii_map += "\n"
     return ascii_map
+
+
+def parse_puzzle_map(input_lines):
+    width = len(input_lines[0])
+    height = len(input_lines)
+    puzzle_map = PuzzleMap(width, height)
+
+    for y, line in enumerate(input_lines):
+        for x, symbol in enumerate(line):
+            puzzle_map.add_symbol(x, y, symbol)
+
+    return puzzle_map
+
+
+class PuzzleMap:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+        self.map_squares = [["." for x in range(width)] for y in range(height)]
+
+    def add_symbol(self, x, y, symbol):
+        self.map_squares[y][x] = symbol
+
+    def is_in_bounds(self, x, y):
+        return 0 <= x < self.width and 0 <= y < self.height
+
+    def __str__(self):
+        return map_array_to_str(self.map_squares)
+
+    def __repr__(self):
+        return map_array_to_str(self.map_squares)
+
+    def __copy__(self):
+        other = PuzzleMap(self.width, self.height)
+        other.map_squares = self.map_squares.copy()
+        return other
