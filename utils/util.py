@@ -26,7 +26,7 @@ def read_file(file_name):
     return content
 
 
-def map_array_to_str(map_array, use_box_chars=False):
+def map_array_to_str(map_array, use_box_chars=False) -> str:
     box_chars = {
         "|": "\u2502",
         "-": "\u2500",
@@ -45,7 +45,31 @@ def map_array_to_str(map_array, use_box_chars=False):
     return ascii_map
 
 
-def parse_puzzle_map(input_lines):
+class PuzzleMap:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+        self.map_squares = [["." for x in range(width)] for y in range(height)]
+
+    def add_symbol(self, x, y, symbol) -> None:
+        self.map_squares[y][x] = symbol
+
+    def is_in_bounds(self, x, y) -> bool:
+        return 0 <= x < self.width and 0 <= y < self.height
+
+    def __str__(self) -> str:
+        return map_array_to_str(self.map_squares)
+
+    def __repr__(self) -> str:
+        return map_array_to_str(self.map_squares)
+
+    def __copy__(self):
+        other = PuzzleMap(self.width, self.height)
+        other.map_squares = self.map_squares.copy()
+        return other
+
+
+def parse_puzzle_map(input_lines) -> PuzzleMap:
     width = len(input_lines[0])
     height = len(input_lines)
     puzzle_map = PuzzleMap(width, height)
@@ -57,25 +81,3 @@ def parse_puzzle_map(input_lines):
     return puzzle_map
 
 
-class PuzzleMap:
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
-        self.map_squares = [["." for x in range(width)] for y in range(height)]
-
-    def add_symbol(self, x, y, symbol):
-        self.map_squares[y][x] = symbol
-
-    def is_in_bounds(self, x, y):
-        return 0 <= x < self.width and 0 <= y < self.height
-
-    def __str__(self):
-        return map_array_to_str(self.map_squares)
-
-    def __repr__(self):
-        return map_array_to_str(self.map_squares)
-
-    def __copy__(self):
-        other = PuzzleMap(self.width, self.height)
-        other.map_squares = self.map_squares.copy()
-        return other
