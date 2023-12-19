@@ -52,7 +52,10 @@ class PuzzleMap:
         self.map_squares = [["." for x in range(width)] for y in range(height)]
 
     def add_symbol(self, x, y, symbol) -> None:
-        self.map_squares[y][x] = symbol
+        if self.is_in_bounds(x, y):
+            self.map_squares[y][x] = symbol
+        else:
+            raise Exception()
 
     def is_in_bounds(self, x, y) -> bool:
         return 0 <= x < self.width and 0 <= y < self.height
