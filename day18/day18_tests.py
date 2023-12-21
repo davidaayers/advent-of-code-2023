@@ -29,11 +29,30 @@ class TestDayEighteen(unittest.TestCase):
         self.assertEqual(6, instructions[0][1])
         self.assertEqual("70c710", instructions[0][2])
 
+    def test_parsing_part2(self):
+        instructions = parse_input_part2(test_input_lines)
+        print(instructions)
+        self.assertEqual(EAST, instructions[0][0])
+        self.assertEqual(461937, instructions[0][1])
+
+
     def test_dig_edge(self):
         instructions = parse_input(test_input_lines)
         dig_map = dig_edge(instructions, 7, 10, 0 , 0)
-        print(dig_map)
         flood_fill_map(dig_map, 0, 0)
         squares = count_squares(dig_map)
-        print(dig_map)
-        print(squares)
+        self.assertEqual(62, squares)
+
+    def test_picks_theorem(self):
+        instructions = parse_input(test_input_lines)
+        perimeter = int(count_edge(instructions) / 2 + 1)
+        vertexes = find_vertexes(instructions)
+        area = calc_area(vertexes) + perimeter
+        self.assertEqual(62, area)
+
+    def test_picks_theorem2(self):
+        instructions = parse_input_part2(test_input_lines)
+        perimeter = int(count_edge(instructions) / 2 + 1)
+        vertexes = find_vertexes(instructions)
+        area = calc_area(vertexes) + perimeter
+        self.assertEqual(952408144115, area)

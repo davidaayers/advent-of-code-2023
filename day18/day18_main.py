@@ -13,5 +13,8 @@ part_1_answer = count_squares(dig_map)
 print(f"Part 1: {part_1_answer}")
 
 # Part 2
-part_2_answer = 0
+instructions = parse_input_part2(input_lines)
+perimeter = int(count_edge(instructions) / 2 + 1)
+vertexes = find_vertexes(instructions)
+part_2_answer = calc_area(vertexes) + perimeter
 print(f"Part 2: {part_2_answer}")

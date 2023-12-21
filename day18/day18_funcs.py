@@ -9,15 +9,31 @@ instr_to_dir = {
     "L": WEST
 }
 
+num_to_dir = {
+    "0": "R",
+    "1": "D",
+    "2": "L",
+    "3": "U"
+}
 
 def parse_input(input_lines):
     instructions = []
     for instruction in input_lines:
-        matches = re.findall(r"^(\w) (\d+) \(#(\w{6})\)$", instruction, )
+        matches = re.findall(r"^(\w) (\d+) \(#(\w{6})\)$", instruction )
         instr = matches[0][0]
         meters = int(matches[0][1])
         color = matches[0][2]
         instructions.append((instr_to_dir[instr], meters, color))
+    return instructions
+
+
+def parse_input_part2(input_lines):
+    instructions = []
+    for instruction in input_lines:
+        matches = re.findall(r"^.+\(#(\w{5})(\d{1})\)$", instruction )
+        meters = int(matches[0][0], 16)
+        instr = matches[0][1]
+        instructions.append((instr_to_dir[num_to_dir[instr]],meters,0))
     return instructions
 
 
@@ -31,6 +47,43 @@ def dig_edge(instructions, width, height, x, y):
             dig_map.add_symbol(x, y, "#")
 
     return dig_map
+
+
+def count_edge(instructions):
+    cnt = 1
+    for instruction in instructions:
+        for r in range(instruction[1]):
+            cnt += 1
+
+    return cnt
+
+
+
+def find_vertexes(instructions):
+    vertexes = []
+    last_vertex = (0, 0)
+    vertexes.append(last_vertex)
+    for instruction in instructions:
+        x, y = 0, 0
+        for r in range(instruction[1]):
+            x += CARDINAL_DIRECTIONS[instruction[0]][1]
+            y += CARDINAL_DIRECTIONS[instruction[0]][0]
+
+        last_vertex = (last_vertex[0] + x, last_vertex[1] + y)
+        vertexes.append(last_vertex)
+
+    return vertexes
+
+
+def calc_area(vertexes):
+    n = len(vertexes)
+    area = 0.0
+    for i in range(n):
+        j = (i + 1) % n
+        area += vertexes[i][0] * vertexes[j][1]
+        area -= vertexes[j][0] * vertexes[i][1]
+    area = abs(area) / 2.0
+    return area
 
 
 # Flood fill from https://lvngd.com/blog/flood-fill-algorithm-python/
