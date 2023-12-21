@@ -31,8 +31,6 @@ def parse_workflow(line):
     name = matches[0][0]
     raw_steps = matches[0][1]
 
-    print(f"workflow={line}")
-
     steps = []
     for s in raw_steps.split(","):
         matches = re.findall(r"^(\w)(<|>)(\d+):(\w+)$", s)
@@ -45,10 +43,7 @@ def parse_workflow(line):
         else:
             steps.append(Step(s))
 
-        print(matches)
-
     workflow = Workflow(name, steps)
-    print(workflow)
     return workflow
 
 
@@ -57,7 +52,6 @@ def sort_parts(workflows, parts):
     for part in parts:
         next_workflow_name="in"
         while next_workflow_name != "A" and next_workflow_name != "R":
-            print(f"looking for workflow {next_workflow_name}")
             next_workflow_name = workflows[next_workflow_name].execute_workflow(part)
 
         if next_workflow_name == "A":
